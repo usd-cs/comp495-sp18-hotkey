@@ -14,7 +14,7 @@ namespace HotKey_MainFolder
     {
         public Form1()
         {
-            //initialize components!
+            //initialize components! yipeee
             InitializeComponent();
         }
     }
