@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -24,13 +24,16 @@ namespace HotKey
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        internal void RegisterHotKey(Keys keys, Keys f12)
+        //Error hanndler for any hot keys we do not have
+        internal void RegisterHotKey(Keys keys, Keys keys2)
         {
             throw new NotImplementedException();
         }
         //this is the window that we want to actually receive the message (aka our app)
         private class Window : NativeWindow, IDisposable
         {
+            //required line of code from mdsn link here
+            //https://msdn.microsoft.com/en-us/library/windows/desktop/ms646279(v=vs.85).aspx
             private static int WM_HOTKEY = 0x0312;
 
             public Window()
@@ -94,7 +97,7 @@ namespace HotKey
         {
             // increment the counter.
             _currentId = _currentId + 1;
-
+            Console.WriteLine(_currentId);
             // register the hot key.
             if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
                 throw new InvalidOperationException("Couldn’t register the hot key.");
@@ -134,6 +137,7 @@ namespace HotKey
         {
             _modifier = modifier;
             _key = key;
+            Console.WriteLine(_key);
         }
 
         public ModifierKeys Modifier
