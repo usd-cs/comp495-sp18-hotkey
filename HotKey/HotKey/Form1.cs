@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -22,12 +23,20 @@ namespace HotKey
             hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
             // register the control +  F12
             hook.RegisterHotKey((ModifierKeys)2, Keys.F12);
+            hook.RegisterHotKey((ModifierKeys)2, Keys.F11);
 
         }
 
         void hook_KeyPressed(object sender, KeyPressedEventArgs e)
         {
             // show the keys pressed in a label.
+            if (e.Key == Keys.F11)
+            {
+                SendKeys.Send("^v");
+            }else if(e.Key == Keys.F12)
+            {
+                SendKeys.Send("^c");
+            }
             label1.Text = e.Modifier.ToString() + " + " + e.Key.ToString();
         }
 
