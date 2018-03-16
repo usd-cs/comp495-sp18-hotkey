@@ -20,14 +20,14 @@ namespace HotKey
             InitializeComponent();
 
             // register the event that is fired after the key press.
-            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
+            hook.KeyPressed += new EventHandler<CustomHotKeyEvent>(hook_KeyPressed);
             // register the control +  F12
             hook.RegisterHotKey((ModifierKeys)2, Keys.F12);
             hook.RegisterHotKey((ModifierKeys)2, Keys.F11);
 
         }
 
-        void hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        void hook_KeyPressed(object sender, CustomHotKeyEvent e)
         {
             // show the keys pressed in a label.
             if (e.Key == Keys.F11)
