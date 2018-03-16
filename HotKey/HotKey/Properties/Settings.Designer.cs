@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HotKey_MainFolder.Properties
+namespace HotKey.Properties
 {
 
 
