@@ -25,10 +25,12 @@ namespace HotKey
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         //Error hanndler for any hot keys we do not have
+        /*
         internal void RegisterHotKey(Keys keys, Keys keys2)
         {
             throw new NotImplementedException();
         }
+        */
         //this is the window that we want to actually receive the message (aka our app)
         private class Window : NativeWindow, IDisposable
         {
