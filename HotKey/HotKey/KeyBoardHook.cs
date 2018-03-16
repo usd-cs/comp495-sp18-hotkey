@@ -61,11 +61,11 @@ namespace HotKey
 
                     // invoke the event to notify the parent.
                     if (KeyPressed != null)
-                        KeyPressed(this, new KeyPressedEventArgs(modifier, key));
+                        KeyPressed(this, new CustomHotKeyEvent(modifier, key));
                 }
             }
 
-            public event EventHandler<KeyPressedEventArgs> KeyPressed;
+            public event EventHandler<CustomHotKeyEvent> KeyPressed;
 
             #region IDisposable Members
 
@@ -83,7 +83,7 @@ namespace HotKey
         public KeyboardHook()
         {
             // register the event of the inner native window.
-            _window.KeyPressed += delegate (object sender, KeyPressedEventArgs args)
+            _window.KeyPressed += delegate (object sender, CustomHotKeyEvent args)
             {
                 if (KeyPressed != null)
                     KeyPressed(this, args);
@@ -108,7 +108,7 @@ namespace HotKey
         /// <summary>
         /// A hot key has been pressed.
         /// </summary>
-        public event EventHandler<KeyPressedEventArgs> KeyPressed;
+        public event EventHandler<CustomHotKeyEvent> KeyPressed;
 
         #region IDisposable Members
 
@@ -130,12 +130,12 @@ namespace HotKey
     /// <summary>
     /// Event Args for the event that is fired after the hot key has been pressed.
     /// </summary>
-    public class KeyPressedEventArgs : EventArgs
+    public class CustomHotKeyEvent : EventArgs
     {
         private ModifierKeys _modifier;
         private Keys _key;
 
-        internal KeyPressedEventArgs(ModifierKeys modifier, Keys key)
+        internal CustomHotKeyEvent(ModifierKeys modifier, Keys key)
         {
             _modifier = modifier;
             _key = key;
