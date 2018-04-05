@@ -37,7 +37,7 @@
             this.actionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.actionLabel.Location = new System.Drawing.Point(3, 0);
             this.actionLabel.Name = "actionLabel";
-            this.actionLabel.Size = new System.Drawing.Size(271, 50);
+            this.actionLabel.Size = new System.Drawing.Size(413, 50);
             this.actionLabel.TabIndex = 1;
             this.actionLabel.Text = "Example Action";
             this.actionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -45,9 +45,9 @@
             // keybindButton
             // 
             this.keybindButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.keybindButton.Location = new System.Drawing.Point(357, 4);
+            this.keybindButton.Location = new System.Drawing.Point(422, 4);
             this.keybindButton.Name = "keybindButton";
-            this.keybindButton.Size = new System.Drawing.Size(318, 43);
+            this.keybindButton.Size = new System.Drawing.Size(395, 43);
             this.keybindButton.TabIndex = 2;
             this.keybindButton.Text = "keybind";
             this.keybindButton.UseVisualStyleBackColor = true;

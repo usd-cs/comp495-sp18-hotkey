@@ -35,7 +35,7 @@ namespace HotKey_MainFolder
 
         private void SetKeybindText(HotKeyItem hotKeyItem)
         {
-            keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Key).Replace(" ", "").Replace(",", "+");
+            keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Key).Replace(" ", "").Replace(",", "+").Replace("Control", "CTRL").ToUpper() ;
         }
 
         private void KeybindButton_KeyUp(object sender, KeyEventArgs e)
