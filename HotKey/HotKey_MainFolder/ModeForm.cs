@@ -12,39 +12,68 @@ namespace HotKey_MainFolder
 {
     public partial class ModeForm : Form
     {
-        List<HotKeyItem> hotKeyItemList = new List<HotKeyItem> { new HotKeyItem("Copy"), new HotKeyItem("Paste"), new HotKeyItem("Test"), new HotKeyItem("Test"), new HotKeyItem("Test"), new HotKeyItem("Test"), new HotKeyItem("Test"), new HotKeyItem("Test"), new HotKeyItem("Test"), new HotKeyItem("Test"), new HotKeyItem("Test") };
+        //TODO see if can data bind hot key item list to panel controls
+        private MainForm mainForm;
+        private Dictionary<Tuple<ModKeys, Keys>, Action> modeFormKeybindDictionary = new Dictionary<Tuple<ModKeys, Keys>, Action>();
+        private List<HotKeyItem> hotKeyItemList = new List<HotKeyItem>();
+        private KeyboardHook hook = new KeyboardHook();
 
-        public ModeForm()
+        public ModeForm(MainForm mainForm, string modeName)
         {
             InitializeComponent();
 
-            //TODO probably won't be calling Init here, but from Form that creates ModeForm
-            Init("Testing Mode");
+            hook.KeyPressed += new EventHandler<CustomHotKeyEvent>(Hook_OnKeybindPressed);
+
+            this.mainForm = mainForm;
+            modeLabel.Text = modeName;
+
+            InitializeHotKeyItems();
+            InitializeHotKeyControls();
         }
 
-        public void Init(string modeName)
+        private void Hook_OnKeybindPressed(object sender, CustomHotKeyEvent e)
         {
-            InitializeHotKeyControls();
-
-            modeLabel.Text = modeName;
+            //execute action from dictioanry
+            modeFormKeybindDictionary[Tuple.Create(e.Modifier, e.Key)].Invoke();
         }
 
         private void InitializeHotKeyControls()
         {
             foreach (HotKeyItem hotKeyItem in hotKeyItemList)
             {
-                hotKeyItemPanel.Controls.Add(new HotKeyControl(hotKeyItemList, hotKeyItem));
+                hotKeyItemPanel.Controls.Add(new HotKeyControl(hotKeyItem));
             }
+        }
+
+        private void InitializeHotKeyItems()
+        {
+            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, Action_Copy, "Copy"));
+            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, Action_Paste, "Paste"));
         }
 
         private void BackButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            mainForm.Show();
+            mainForm.Location = Location;
+
+            Close();
         }
 
         private void AddHotKeyButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            HotKeyItem hotKeyItem = new HotKeyItem(hook, modeFormKeybindDictionary, null, "Test");
+            hotKeyItemList.Add(hotKeyItem);
+            hotKeyItemPanel.Controls.Add(new HotKeyControl(hotKeyItem));
+        }
+
+        private void Action_Copy()
+        {
+            SendKeys.Send("^c");
+        }
+
+        private void Action_Paste()
+        {
+            SendKeys.Send("^v");
         }
     }
 }

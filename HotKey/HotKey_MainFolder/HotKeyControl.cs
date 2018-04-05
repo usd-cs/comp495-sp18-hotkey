@@ -11,35 +11,50 @@ using System.Diagnostics;
 
 namespace HotKey_MainFolder
 {
+    //DISPLAYS DATA OF HOTKEYITEM
     public partial class HotKeyControl : UserControl
     {
+        private HotKeyItem hotKeyItem;
+
         public HotKeyControl()
         {
             InitializeComponent();
         }
 
-        public HotKeyControl(List<HotKeyItem> hotKeyItemList, HotKeyItem hotKeyItem)
+        public HotKeyControl(HotKeyItem hotKeyItem)
         {
-            //TODO the global Map/Dict should be passed in or be accessible so we can add new binds. Also the delegate/method corresponding to the action should be passed in.
             InitializeComponent();
 
+            this.hotKeyItem = hotKeyItem;
             actionLabel.Text = hotKeyItem.ActionName;
-
-            if (hotKeyItem.Keys == Keys.None)
+            if (hotKeyItem.Key == Keys.None)
                 keybindButton.Text = "Not bound";
             else
-                keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Keys).Replace(" ","").Replace(",","+");
+                SetKeybindText(hotKeyItem);
+        }
+
+        private void SetKeybindText(HotKeyItem hotKeyItem)
+        {
+            keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Key).Replace(" ", "").Replace(",", "+");
         }
 
         private void KeybindButton_KeyUp(object sender, KeyEventArgs e)
         {
-            //TODO Here we want to register the hotkey and add a new HotKeyItem to the list for current form. I think we should also add to a Map/Dict that has the keybind (modkeys+keys -> action delegate) map to a action so that our hook can easily run the desired delegate/method
-
-            //ignore if the primary key code is a modifier
-            if (!(e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey))
+            //ignore if only modifier pressed or no modifiers pressed
+            Keys key = e.KeyCode;
+            if (!(key == Keys.ControlKey || key == Keys.Menu || key == Keys.ShiftKey) && e.Modifiers!=0 )
             {
-                //TODO instead of using KeyData, check for modifiers with bit operations and add KeyCode at the end of the modifiers, this will also make it easy to construct HotKeyItem and add to Map/Dict
-                keybindButton.Text = e.KeyData.ToString().Replace(" ", "").Replace(",", "+");
+                uint modKeysValue = 0;
+                if (e.Control)
+                    modKeysValue += 2;
+                if (e.Alt)
+                    modKeysValue += 1;
+                if (e.Shift)
+                    modKeysValue += 4;
+
+                hotKeyItem.SetKeybind((ModKeys)modKeysValue, key);
+
+                SetKeybindText(hotKeyItem);
             }
 
             //remove focus from keybind button so as not to capture/override keybind just set

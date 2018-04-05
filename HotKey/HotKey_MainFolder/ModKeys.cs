@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace HotKey_MainFolder
 {
     [Flags]
-    public enum ModKeys : uint { Alt = 1, Control = 2, Shift = 4, Win = 8 }
+    public enum ModKeys : uint { Alt = 1, Control = 2, Shift = 4 }
 }

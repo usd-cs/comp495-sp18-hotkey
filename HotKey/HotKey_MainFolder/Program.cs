@@ -16,7 +16,7 @@ namespace HotKey_MainFolder
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ModeForm());
+            Application.Run(new MainForm());
         }
     }
 }

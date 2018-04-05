@@ -45,6 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KeyboardHook.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HotKeyItem.cs" />
     <Compile Include="ModKeys.cs" />
     <Compile Include="ModeForm.cs">
@@ -61,6 +68,9 @@
     <Compile Include="HotKeyControl.Designer.cs">
       <DependentUpon>HotKeyControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ModeForm.resx">
       <DependentUpon>ModeForm.cs</DependentUpon>
     </EmbeddedResource>
