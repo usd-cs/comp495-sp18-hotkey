@@ -38,14 +38,20 @@ namespace HotKey_MainFolder
             //keybind not set, so no registering
         }
 
-        public void SetKeybind(ModKeys modKeys, Keys key)
+        public bool SetKeybind(ModKeys modKeys, Keys key)
         {
             UnregisterKeybind(true);
 
             this.modKeys = modKeys;
             this.key = key;
 
-            RegisterKeybind(true);
+            bool successful = RegisterKeybind(true);
+            if (!successful)
+            {
+                this.modKeys = ModKeys.None;
+                this.key = Keys.None;
+            }
+            return successful;
         }
 
         //Field vars will contain old values when this is called
@@ -61,7 +67,7 @@ namespace HotKey_MainFolder
         }
 
         //Field vars will contain updated values when this is called
-        private void RegisterKeybind(bool registerHook)
+        private bool RegisterKeybind(bool registerHook)
         {
             if (action != null)
             {
@@ -70,9 +76,17 @@ namespace HotKey_MainFolder
                 if (registerHook)
                 {
                     //register hot key with hook
-                    hook.RegisterHotKey(modKeys, key);
+                    try
+                    {
+                        hook.RegisterHotKey(modKeys, key);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return false;
+                    }
                 }
             }
+            return true;
         }
 
         public Action Action
