@@ -35,7 +35,7 @@ namespace HotKey_MainFolder
 
         private void SetKeybindText(HotKeyItem hotKeyItem)
         {
-            keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Key).Replace(" ", "").Replace(",", "+");
+            keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Key).Replace(" ", "").Replace(",", "+").Replace("Control", "CTRL").ToUpper() ;
         }
 
         private void KeybindButton_KeyUp(object sender, KeyEventArgs e)
@@ -52,13 +52,24 @@ namespace HotKey_MainFolder
                 if (e.Shift)
                     modKeysValue += 4;
 
-                hotKeyItem.SetKeybind((ModKeys)modKeysValue, key);
-
-                SetKeybindText(hotKeyItem);
+                if (hotKeyItem.SetKeybind((ModKeys)modKeysValue, key))
+                    SetKeybindText(hotKeyItem);
+                else
+                    keybindButton.Text = "Not Bound";
             }
 
             //remove focus from keybind button so as not to capture/override keybind just set
             Parent.Focus();
+        }
+
+        private void KeybindButton_Enter(object sender, EventArgs e)
+        {
+            ActionBank.RespondToInput = false;
+        }
+
+        private void KeybindButton_Leave(object sender, EventArgs e)
+        {
+            ActionBank.RespondToInput = true;
         }
     }
 }

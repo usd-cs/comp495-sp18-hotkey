@@ -34,7 +34,12 @@ namespace HotKey_MainFolder
         private void Hook_OnKeybindPressed(object sender, CustomHotKeyEvent e)
         {
             //execute action from dictioanry
-            modeFormKeybindDictionary[Tuple.Create(e.Modifier, e.Key)].Invoke();
+            //TODO can remove try/catch when UnregisterHotKey implemented
+            try
+            {
+                modeFormKeybindDictionary[Tuple.Create(e.Modifier, e.Key)].Invoke();
+            }
+            catch (KeyNotFoundException) { }
         }
 
         private void InitializeHotKeyControls()
@@ -47,8 +52,9 @@ namespace HotKey_MainFolder
 
         private void InitializeHotKeyItems()
         {
-            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, Action_Copy, "Copy"));
-            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, Action_Paste, "Paste"));
+            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, ActionBank.Copy, "Copy"));
+            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, ActionBank.Paste, "Paste"));
+            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, ActionBank.AppendToClipboard, "Append to Clipboard"));
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -61,19 +67,9 @@ namespace HotKey_MainFolder
 
         private void AddHotKeyButton_Click(object sender, EventArgs e)
         {
-            HotKeyItem hotKeyItem = new HotKeyItem(hook, modeFormKeybindDictionary, null, "Test");
+            HotKeyItem hotKeyItem = new HotKeyItem(hook, modeFormKeybindDictionary, null, "Test (No Action)");
             hotKeyItemList.Add(hotKeyItem);
             hotKeyItemPanel.Controls.Add(new HotKeyControl(hotKeyItem));
-        }
-
-        private void Action_Copy()
-        {
-            SendKeys.Send("^c");
-        }
-
-        private void Action_Paste()
-        {
-            SendKeys.Send("^v");
         }
     }
 }
