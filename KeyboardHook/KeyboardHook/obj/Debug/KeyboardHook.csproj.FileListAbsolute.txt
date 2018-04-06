@@ -1,0 +1,8 @@
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\obj\Debug\KeyboardHook.Properties.Resources.resources
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\obj\Debug\KeyboardHook.csproj.GenerateResource.Cache
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\obj\Debug\KeyboardHook.csproj.CoreCompileInputs.cache
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\bin\Debug\KeyboardHook.exe.config
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\bin\Debug\KeyboardHook.exe
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\bin\Debug\KeyboardHook.pdb
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\obj\Debug\KeyboardHook.exe
+C:\Users\Muk Storm\source\repos\KeyboardHook\KeyboardHook\obj\Debug\KeyboardHook.pdb
