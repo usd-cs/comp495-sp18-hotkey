@@ -51,7 +51,9 @@
             this.keybindButton.TabIndex = 2;
             this.keybindButton.Text = "keybind";
             this.keybindButton.UseVisualStyleBackColor = true;
+            this.keybindButton.Enter += new System.EventHandler(this.KeybindButton_Enter);
             this.keybindButton.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeybindButton_KeyUp);
+            this.keybindButton.Leave += new System.EventHandler(this.KeybindButton_Leave);
             // 
             // HotKeyControl
             // 

@@ -52,13 +52,24 @@ namespace HotKey_MainFolder
                 if (e.Shift)
                     modKeysValue += 4;
 
-                hotKeyItem.SetKeybind((ModKeys)modKeysValue, key);
-
-                SetKeybindText(hotKeyItem);
+                if (hotKeyItem.SetKeybind((ModKeys)modKeysValue, key))
+                    SetKeybindText(hotKeyItem);
+                else
+                    keybindButton.Text = "Not Bound";
             }
 
             //remove focus from keybind button so as not to capture/override keybind just set
             Parent.Focus();
+        }
+
+        private void KeybindButton_Enter(object sender, EventArgs e)
+        {
+            ActionBank.RespondToInput = false;
+        }
+
+        private void KeybindButton_Leave(object sender, EventArgs e)
+        {
+            ActionBank.RespondToInput = true;
         }
     }
 }
