@@ -11,6 +11,8 @@ namespace HotKey_MainFolder
     {
         static bool respondToInput = true;
 
+        static string clipboardOne, clipboardTwo, clipboardThree;
+
         public static void Copy()
         {
             if (respondToInput)

@@ -16,9 +16,9 @@ namespace HotKey_MainFolder
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
+        IntPtr hWnd;
         int modifiers;
         int key;
-        IntPtr hWnd;
         int id;
 
         public KeybindHook(IntPtr formHandle)

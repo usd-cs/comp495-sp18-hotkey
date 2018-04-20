@@ -33,8 +33,7 @@ namespace HotKey_MainFolder
             //if hot key message
             if (m.Msg == 0x0312)
             {
-                //? checks for null action and does not try to invoke
-                keybindActionDictionary[Tuple.Create((ModKeys)m.LParam, (Keys)m.WParam)]?.Invoke();
+                keybindActionDictionary[Tuple.Create((ModKeys) (m.LParam.ToInt32() & 0xFFFF), (Keys) (m.LParam.ToInt32() >> 16))]?.Invoke();
                 //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
             }
 
