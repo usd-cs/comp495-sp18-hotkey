@@ -34,7 +34,7 @@ namespace HotKey_MainFolder
             if (m.Msg == 0x0312)
             {
                 keybindActionDictionary[Tuple.Create((ModKeys) (m.LParam.ToInt32() & 0xFFFF), (Keys) (m.LParam.ToInt32() >> 16))]?.Invoke();
-                //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
+                //TODO should run base or return here (would this stop OS from executing Hot Key?)
             }
 
             base.WndProc(ref m);
@@ -42,9 +42,15 @@ namespace HotKey_MainFolder
 
         private void InitializeHotKeyItems()
         {
-            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Copy, "Copy", ModKeys.None, Keys.None));
-            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Paste, "Paste", ModKeys.None, Keys.None));
-            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboard, "Append to Clipboard", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.CopyPrimary, "Copy Primary", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.PastePrimary, "Paste Primary", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboardPrimary, "Append to Primary Clipboard", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.CopyOne, "Copy Secondary", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.PasteOne, "Paste Secondary", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboardOne, "Append to Secondary Clipboard", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.CopyTwo, "Copy Tertiary", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.PasteTwo, "Paste Tertiary", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboardTwo, "Append to Tertiary Clipboard", ModKeys.None, Keys.None));
         }
 
         private void InitializeHotKeyControls()

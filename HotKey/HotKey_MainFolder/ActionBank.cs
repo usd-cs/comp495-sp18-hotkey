@@ -11,35 +11,117 @@ namespace HotKey_MainFolder
     {
         static bool respondToInput = true;
 
-        static string clipboardOne, clipboardTwo, clipboardThree;
+        static List<Tuple<string, object>> clipboardList = new List<Tuple<string, object>>(),
+            clipboardOneList = new List<Tuple<string, object>>(),
+            clipboardTwoList = new List<Tuple<string, object>>();
 
-        public static void Copy()
-        {
-            if (respondToInput)
-                SendKeys.Send("^c");
-        }
 
-        public static void Paste()
-        {
-            if (respondToInput)
-                SendKeys.Send("^v");
-        }
-
-        public static void AppendToClipboard()
+        private static void Copy(int index)
         {
             if (respondToInput)
             {
-                //NOTE: currently only works if appending text to text
-                string existingText = string.Empty;
-                if (Clipboard.ContainsText())
-                {
-                    existingText = Clipboard.GetText();
-                }
+                List<Tuple<string, object>> list = GetCorrectClipboard(index);
+
+                list.Clear();
+
                 SendKeys.Send("^c");
-                if (Clipboard.ContainsText())
+                CaptureClipboard(index);
+            }
+        }
+        public static void CopyPrimary()
+        {
+            Copy(0);
+        }
+        public static void CopyOne()
+        {
+            Copy(1);
+        }
+        public static void CopyTwo()
+        {
+            Copy(2);
+        }
+
+        private static void Paste(int index)
+        {
+            if (respondToInput)
+            {
+                List<Tuple<string, object>> list = GetCorrectClipboard(index);
+
+                foreach (Tuple<string, object> clipboardItem in list)
                 {
-                    Clipboard.SetData(DataFormats.Text, string.Format("{0}{1}", existingText, Clipboard.GetText()));
+                    Clipboard.SetData(clipboardItem.Item1, clipboardItem.Item2);
+                    SendKeys.Send("^v");
                 }
+            }
+        }
+        public static void PastePrimary()
+        {
+            Paste(0);
+        }
+        public static void PasteOne()
+        {
+            Paste(1);
+        }
+        public static void PasteTwo()
+        {
+            Paste(2);
+        }
+
+        private static void AppendToClipboard(int index)
+        {
+            if (respondToInput)
+            {
+                SendKeys.Send("^c");
+                CaptureClipboard(index);
+            }
+        }
+        public static void AppendToClipboardPrimary()
+        {
+            AppendToClipboard(0);
+        }
+        public static void AppendToClipboardOne()
+        {
+            AppendToClipboard(1);
+        }
+        public static void AppendToClipboardTwo()
+        {
+            AppendToClipboard(2);
+        }
+
+        private static void CaptureClipboard(int index)
+        {
+            List<Tuple<string, object>> list = GetCorrectClipboard(index);
+
+            if (Clipboard.ContainsText())
+            {
+                list.Add(Tuple.Create(DataFormats.Text, (object)Clipboard.GetText()));
+            }
+            else if (Clipboard.ContainsImage())
+            {
+                list.Add(Tuple.Create(DataFormats.Bitmap, (object)Clipboard.GetImage()));
+            }
+            else if (Clipboard.ContainsAudio())
+            {
+                list.Add(Tuple.Create(DataFormats.WaveAudio, (object)Clipboard.GetAudioStream()));
+            }
+            else if (Clipboard.ContainsFileDropList())
+            {
+                list.Add(Tuple.Create(DataFormats.FileDrop, (object)Clipboard.GetFileDropList()));
+            }
+        }
+
+        private static ref List<Tuple<string, object>> GetCorrectClipboard(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return ref clipboardList;
+                case 1:
+                    return ref clipboardOneList;
+                case 2:
+                    return ref clipboardTwoList;
+                default:
+                    return ref clipboardList;
             }
         }
 
