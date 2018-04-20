@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Permissions;
 
 namespace HotKey_MainFolder
 {
@@ -16,7 +17,7 @@ namespace HotKey_MainFolder
         private MainForm mainForm;
         private Dictionary<Tuple<ModKeys, Keys>, Action> keybindActionDictionary = new Dictionary<Tuple<ModKeys, Keys>, Action>();
         private List<HotKeyItem> hotKeyItemList = new List<HotKeyItem>();
-
+        public static bool USER_ENTRY_CATCH = true;
         public ModeForm(MainForm mainForm, string modeName)
         {
             InitializeComponent();
@@ -29,15 +30,20 @@ namespace HotKey_MainFolder
         }
 
         protected override void WndProc(ref Message m)
-        {
-            //if hot key message
+        {            
+                //if hot key message
             if (m.Msg == 0x0312)
             {
-                keybindActionDictionary[Tuple.Create((ModKeys) (m.LParam.ToInt32() & 0xFFFF), (Keys) (m.LParam.ToInt32() >> 16))]?.Invoke();
-                //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
+               
+                    keybindActionDictionary[Tuple.Create((ModKeys)(m.LParam.ToInt32() & 0xFFFF), (Keys)(m.LParam.ToInt32() >> 16))]?.Invoke();
+                
+                    //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
             }
 
+
             base.WndProc(ref m);
+
+
         }
 
         private void InitializeHotKeyItems()
@@ -45,6 +51,11 @@ namespace HotKey_MainFolder
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Copy, "Copy", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Paste, "Paste", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboard, "Append to Clipboard", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.OpenToDirectory, "Open To File Directory", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.OpenSpecifiedWebPage, "Open StackOverFlow", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.ClipboardSearch, "Search Current Clipboard", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.SetVolume, "Set Volume", ModKeys.None, Keys.None));
+
         }
 
         private void InitializeHotKeyControls()
