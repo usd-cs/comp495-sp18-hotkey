@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionBank.cs" />
-    <Compile Include="KeyboardHook.cs" />
+    <Compile Include="KeybindHook.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
