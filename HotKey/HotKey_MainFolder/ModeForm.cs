@@ -51,6 +51,10 @@ namespace HotKey_MainFolder
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.CopyTwo, "Copy Tertiary", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.PasteTwo, "Paste Tertiary", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboardTwo, "Append to Tertiary Clipboard", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.OpenToDirectory, "Open To File Directory", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.OpenSpecifiedWebPage, "Open StackOverFlow", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.ClipboardSearch, "Search Current Clipboard", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.SetVolume, "Set Volume", ModKeys.None, Keys.None));
         }
 
         private void InitializeHotKeyControls()
