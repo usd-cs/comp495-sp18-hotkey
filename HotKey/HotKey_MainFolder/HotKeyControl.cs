@@ -27,15 +27,15 @@ namespace HotKey_MainFolder
 
             this.hotKeyItem = hotKeyItem;
             actionLabel.Text = hotKeyItem.ActionName;
+            SetKeybindText();
+        }
+
+        private void SetKeybindText()
+        {
             if (hotKeyItem.Key == Keys.None)
                 keybindButton.Text = "Not bound";
             else
-                SetKeybindText(hotKeyItem);
-        }
-
-        private void SetKeybindText(HotKeyItem hotKeyItem)
-        {
-            keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Key).Replace(" ", "").Replace(",", "+").Replace("Control", "CTRL").ToUpper() ;
+                keybindButton.Text = string.Format("{0}+{1}", hotKeyItem.ModKeys, hotKeyItem.Key).Replace(" ", "").Replace(",", "+").Replace("Control", "CTRL").ToUpper() ;
         }
 
         private void KeybindButton_KeyUp(object sender, KeyEventArgs e)
@@ -52,14 +52,20 @@ namespace HotKey_MainFolder
                 if (e.Shift)
                     modKeysValue += 4;
 
-                if (hotKeyItem.SetKeybind((ModKeys)modKeysValue, key))
-                    SetKeybindText(hotKeyItem);
-                else
-                    keybindButton.Text = "Not Bound";
+                UpdateKeybind(key, (ModKeys) modKeysValue);
             }
+            //undo/reset keybind if escape key pressed
+            else if (key == Keys.Escape)
+                UpdateKeybind(Keys.None, ModKeys.None);
 
             //remove focus from keybind button so as not to capture/override keybind just set
             Parent.Focus();
+        }
+
+        private void UpdateKeybind(Keys key, ModKeys modKeys)
+        {
+            hotKeyItem.UpdateKeybind(modKeys, key);
+            SetKeybindText();
         }
 
         private void KeybindButton_Enter(object sender, EventArgs e)

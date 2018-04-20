@@ -9,96 +9,73 @@ namespace HotKey_MainFolder
 {
     public class HotKeyItem
     {
-        private KeyboardHook hook;
-        private Dictionary<Tuple<ModKeys, Keys>, Action> modeFormKeybindDictionary;
+        private Dictionary<Tuple<ModKeys, Keys>, Action> keybindActionDictionary;
         private Action action;
         private string actionName;
         private ModKeys modKeys;
         private Keys key;
 
-        public HotKeyItem(KeyboardHook hook, Dictionary<Tuple<ModKeys, Keys>, Action> modeFormKeybindDictionary, Action action, string actionName, ModKeys modKeys, Keys key)
+        private KeybindHook keybindHook;
+
+
+        public HotKeyItem(IntPtr formHandle, Dictionary<Tuple<ModKeys, Keys>, Action> keybindActionDictionary, Action action, string actionName, ModKeys modKeys, Keys key)
         {
-            this.hook = hook;
-            this.modeFormKeybindDictionary = modeFormKeybindDictionary;
+            this.keybindActionDictionary = keybindActionDictionary;
             this.action = action;
             this.actionName = actionName;
             this.modKeys = modKeys;
             this.key = key;
 
-            RegisterKeybind(true);
+            //create keybind hook and register keybind if it exists
+            keybindHook = new KeybindHook(formHandle);
+            RegisterKeybind();
         }
 
-        public HotKeyItem(KeyboardHook hook, Dictionary<Tuple<ModKeys, Keys>, Action> modeFormKeybindDictionary, Action action, string actionName)
+        public void UpdateKeybind(ModKeys modKeys, Keys key)
         {
-            this.hook = hook;
-            this.modeFormKeybindDictionary = modeFormKeybindDictionary;
-            this.action = action;
-            this.actionName = actionName;
-
-            //keybind not set, so no registering
-        }
-
-        public bool SetKeybind(ModKeys modKeys, Keys key)
-        {
-            UnregisterKeybind(true);
+            UnregisterKeybind();
 
             this.modKeys = modKeys;
             this.key = key;
-
-            bool successful = RegisterKeybind(true);
-            if (!successful)
-            {
-                this.modKeys = ModKeys.None;
-                this.key = Keys.None;
-            }
-            return successful;
+            RegisterKeybind();
         }
 
-        //Field vars will contain old values when this is called
-        private void UnregisterKeybind(bool unregisterHook)
+        private void UnregisterKeybind()
         {
-            if (action != null)
+            if (key != Keys.None)
             {
-                //remove previous keybind from dictionary
-                modeFormKeybindDictionary.Remove(Tuple.Create(modKeys, key));
-                if (unregisterHook) ;
-                //TODO unregister keybind from hook
+                keybindActionDictionary.Remove(Tuple.Create(modKeys, key));
+                keybindHook.UnregisterKeybind();
             }
         }
 
-        //Field vars will contain updated values when this is called
-        private bool RegisterKeybind(bool registerHook)
+        private void RegisterKeybind()
         {
-            if (action != null)
+            if (key != Keys.None)
             {
-                //add keybind to dictionary
-                modeFormKeybindDictionary[Tuple.Create(modKeys, key)] = action;
-                if (registerHook)
+                //try to register keybind, add to dictionary if successful, else set keys to none
+                keybindHook.SetKeybind(modKeys, key);
+                if (keybindHook.RegisterKeybind())
+                    keybindActionDictionary.Add(Tuple.Create(modKeys, key), action);
+                else
                 {
-                    //register hot key with hook
-                    try
-                    {
-                        hook.RegisterHotKey(modKeys, key);
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        return false;
-                    }
+                    modKeys = ModKeys.None;
+                    key = Keys.None;
                 }
             }
-            return true;
         }
 
         public Action Action
         {
             set
             {
-                //if action updated, remove old dictionary entry and add updated dictionary entry
-                UnregisterKeybind(false);
-                action = value;
-                RegisterKeybind(false);
+                //updated dictionary entry if it exists
+                if (keybindActionDictionary.ContainsKey(Tuple.Create(modKeys, key)))
+                    keybindActionDictionary[Tuple.Create(modKeys, key)] = action;
             }
         }
+
+        //getters used by HotKeyControl
         public string ActionName { get => actionName; }
         public ModKeys ModKeys { get => modKeys; }
         public Keys Key { get => key; }
