@@ -37,7 +37,7 @@
             this.testModeFormButton.Name = "testModeFormButton";
             this.testModeFormButton.Size = new System.Drawing.Size(164, 61);
             this.testModeFormButton.TabIndex = 0;
-            this.testModeFormButton.Text = "test mode form";
+            this.testModeFormButton.Text = "TEST MODE";
             this.testModeFormButton.UseVisualStyleBackColor = true;
             this.testModeFormButton.Click += new System.EventHandler(this.TestModeFormButton_Click);
             // 

@@ -14,15 +14,12 @@ namespace HotKey_MainFolder
     {
         //TODO see if can data bind hot key item list to panel controls
         private MainForm mainForm;
-        private Dictionary<Tuple<ModKeys, Keys>, Action> modeFormKeybindDictionary = new Dictionary<Tuple<ModKeys, Keys>, Action>();
+        private Dictionary<Tuple<ModKeys, Keys>, Action> keybindActionDictionary = new Dictionary<Tuple<ModKeys, Keys>, Action>();
         private List<HotKeyItem> hotKeyItemList = new List<HotKeyItem>();
-        private KeyboardHook hook = new KeyboardHook();
 
         public ModeForm(MainForm mainForm, string modeName)
         {
             InitializeComponent();
-
-            hook.KeyPressed += new EventHandler<CustomHotKeyEvent>(Hook_OnKeybindPressed);
 
             this.mainForm = mainForm;
             modeLabel.Text = modeName;
@@ -31,15 +28,24 @@ namespace HotKey_MainFolder
             InitializeHotKeyControls();
         }
 
-        private void Hook_OnKeybindPressed(object sender, CustomHotKeyEvent e)
+        protected override void WndProc(ref Message m)
         {
-            //execute action from dictioanry
-            //TODO can remove try/catch when UnregisterHotKey implemented
-            try
+            //if hot key message
+            if (m.Msg == 0x0312)
             {
-                modeFormKeybindDictionary[Tuple.Create(e.Modifier, e.Key)].Invoke();
+                //? checks for null action and does not try to invoke
+                keybindActionDictionary[Tuple.Create((ModKeys)m.LParam, (Keys)m.WParam)]?.Invoke();
+                //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
             }
-            catch (KeyNotFoundException) { }
+
+            base.WndProc(ref m);
+        }
+
+        private void InitializeHotKeyItems()
+        {
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Copy, "Copy", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Paste, "Paste", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboard, "Append to Clipboard", ModKeys.None, Keys.None));
         }
 
         private void InitializeHotKeyControls()
@@ -48,13 +54,6 @@ namespace HotKey_MainFolder
             {
                 hotKeyItemPanel.Controls.Add(new HotKeyControl(hotKeyItem));
             }
-        }
-
-        private void InitializeHotKeyItems()
-        {
-            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, ActionBank.Copy, "Copy"));
-            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, ActionBank.Paste, "Paste"));
-            hotKeyItemList.Add(new HotKeyItem(hook, modeFormKeybindDictionary, ActionBank.AppendToClipboard, "Append to Clipboard"));
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -67,7 +66,7 @@ namespace HotKey_MainFolder
 
         private void AddHotKeyButton_Click(object sender, EventArgs e)
         {
-            HotKeyItem hotKeyItem = new HotKeyItem(hook, modeFormKeybindDictionary, null, "Test (No Action)");
+            HotKeyItem hotKeyItem = new HotKeyItem(Handle, keybindActionDictionary, null, "Test (No Action)", ModKeys.None, Keys.None);
             hotKeyItemList.Add(hotKeyItem);
             hotKeyItemPanel.Controls.Add(new HotKeyControl(hotKeyItem));
         }
