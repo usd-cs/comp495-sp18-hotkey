@@ -28,8 +28,6 @@ namespace HotKey_MainFolder
         private const int WM_GETTEXT = 0x000D;
         private const int WM_GETTEXTLENGTH = 0x000E;
         
-
-
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessageW(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll")]
@@ -38,7 +36,6 @@ namespace HotKey_MainFolder
         static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int RegisterWindowMessage(string lpString);
-
         [DllImport("user32.dll", EntryPoint = "SendMessage", CharSet = CharSet.Auto)] 
         public static extern bool SendMessage(IntPtr hWnd, uint Msg, int wParam, StringBuilder lParam);
         [DllImport("user32.dll", SetLastError = true)]

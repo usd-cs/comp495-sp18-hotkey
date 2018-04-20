@@ -30,18 +30,18 @@ namespace HotKey_MainFolder
         }
 
         protected override void WndProc(ref Message m)
-        {            
+        {
+            
                 //if hot key message
             if (m.Msg == 0x0312)
             {
-                    
-                    keybindActionDictionary[Tuple.Create((ModKeys)(m.LParam.ToInt32() & 0xFFFF), (Keys)(m.LParam.ToInt32() >> 16))]?.Invoke();
-                
-                    //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
+                Console.WriteLine("LOOP");
+                keybindActionDictionary[Tuple.Create((ModKeys)(m.LParam.ToInt32() & 0xFFFF), (Keys)(m.LParam.ToInt32() >> 16))]?.Invoke();
+                //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
             }
-
-            
+            Console.WriteLine("REACH");
             base.WndProc(ref m);
+            
 
 
         }
