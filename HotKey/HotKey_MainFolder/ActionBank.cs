@@ -83,12 +83,17 @@ namespace HotKey_MainFolder
 
         public static void OpenToDirectory()
         {
-            string filePath = Path.GetDirectoryName(@Clipboard.GetText());
+            string filePath = Path.GetFullPath(@Clipboard.GetText());
+            
             Console.WriteLine(filePath);
             if (!Directory.Exists(filePath))
             {
-                Console.WriteLine("this is not a directory bruh");
-                return;
+                filePath = Path.GetDirectoryName(Clipboard.GetText());
+                if (!Directory.Exists(filePath))
+                {
+                    Console.WriteLine("this is not a directory bruh");
+                    return;
+                }
             }
 
             // combine the arguments together

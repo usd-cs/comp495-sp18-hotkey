@@ -34,13 +34,13 @@ namespace HotKey_MainFolder
                 //if hot key message
             if (m.Msg == 0x0312)
             {
-               
+                    
                     keybindActionDictionary[Tuple.Create((ModKeys)(m.LParam.ToInt32() & 0xFFFF), (Keys)(m.LParam.ToInt32() >> 16))]?.Invoke();
                 
                     //TODO should run base or return here (would this stop OS from doing executing Hot Key?)
             }
 
-
+            
             base.WndProc(ref m);
 
 
