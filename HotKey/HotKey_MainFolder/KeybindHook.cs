@@ -20,7 +20,7 @@ namespace HotKey_MainFolder
         int modifiers;
         int key;
         int id;
-
+        
         public KeybindHook(IntPtr formHandle)
         {
             hWnd = formHandle;
