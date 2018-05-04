@@ -38,6 +38,7 @@ namespace HotKey_MainFolder
         {
             //unique id of Hot Key
             return modifiers ^ key ^ hWnd.ToInt32();
+           // return -3;
         }
 
         public bool RegisterKeybind()
