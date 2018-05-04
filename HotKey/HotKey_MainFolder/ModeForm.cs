@@ -10,13 +10,14 @@ using System.Windows.Forms;
 
 namespace HotKey_MainFolder
 {
+   
     public partial class ModeForm : Form
     {
         //TODO see if can data bind hot key item list to panel controls
         private MainForm mainForm;
         private Dictionary<Tuple<ModKeys, Keys>, Action> keybindActionDictionary = new Dictionary<Tuple<ModKeys, Keys>, Action>();
         private List<HotKeyItem> hotKeyItemList = new List<HotKeyItem>();
-
+        public bool ourKeys = false;
         public ModeForm(MainForm mainForm, string modeName)
         {
             InitializeComponent();
@@ -30,10 +31,14 @@ namespace HotKey_MainFolder
 
         protected override void WndProc(ref Message m)
         {
+            
+            
             //if hot key message
             if (m.Msg == 0x0312 && m.WParam.ToInt32() != -1 && m.WParam.ToInt32() != -2)
             {
+               
                 keybindActionDictionary[Tuple.Create((ModKeys) (m.LParam.ToInt32() & 0xFFFF), (Keys) (m.LParam.ToInt32() >> 16))]?.Invoke();
+                
                 //TODO should run base or return here (would this stop OS from executing Hot Key?)
             }
 
@@ -42,6 +47,16 @@ namespace HotKey_MainFolder
 
         private void InitializeHotKeyItems()
         {
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Define, "Define Search", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Screenshot, "Screenshot", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AmazonSearch, "Amazon Search", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.TaskMngr, "Task Manager", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.Calculator, "Calculate", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.CloseCurrentProcess, "Close Focused Window", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.HighlightSearch, "Highlight Search", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.YouTubeSearch, "YouTube Search", ModKeys.None, Keys.None));
+            hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.OpenClosedTab, "Open Last Closed Tab", ModKeys.None, Keys.None));
+            //stuff above is new
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.CopyPrimary, "Copy Primary", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.PastePrimary, "Paste Primary", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.AppendToClipboardPrimary, "Append to Primary Clipboard", ModKeys.None, Keys.None));
@@ -55,6 +70,7 @@ namespace HotKey_MainFolder
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.OpenSpecifiedWebPage, "Open StackOverFlow", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.ClipboardSearch, "Search Current Clipboard", ModKeys.None, Keys.None));
             hotKeyItemList.Add(new HotKeyItem(Handle, keybindActionDictionary, ActionBank.SetVolume, "Set Volume", ModKeys.None, Keys.None));
+            
         }
 
         private void InitializeHotKeyControls()

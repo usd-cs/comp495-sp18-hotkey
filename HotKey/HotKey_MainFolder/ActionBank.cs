@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace HotKey_MainFolder
 {
+
     public static class ActionBank
     {
+        
         [DllImport("user32.dll")]
         private static extern IntPtr GetOpenClipboardWindow();
-
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool SetForegroundWindow(IntPtr hwnd);
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessageW(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll")]
@@ -24,11 +27,20 @@ namespace HotKey_MainFolder
         static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int RegisterWindowMessage(string lpString);
-
         [DllImport("user32.dll", EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
         public static extern bool SendMessage(IntPtr hWnd, uint Msg, int wParam, StringBuilder lParam);
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr SendMessage(int hWnd, int Msg, int wparam, int lparam);
+        [DllImport("user32.dll")]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        [DllImport("user32.Dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnumChildWindows(IntPtr parentHandle, Win32Callback callback, IntPtr lParam);
+        [DllImport("user32.dll")]
+        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        public delegate bool Win32Callback(IntPtr hwnd, IntPtr lParam);
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetMessageExtraInfo();
 
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int APPCOMMAND_VOLUME_UP = 0xA0000;
@@ -38,6 +50,10 @@ namespace HotKey_MainFolder
         private const int WM_APPCOMMAND = 0x319;
         private const int WM_GETTEXT = 0x000D;
         private const int WM_GETTEXTLENGTH = 0x000E;
+        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        const UInt32 SWP_NOSIZE = 0x0001;
+        const UInt32 SWP_NOMOVE = 0x0002;
+        const UInt32 SWP_SHOWWINDOW = 0x0040;
 
         static bool respondToInput = true;
 
@@ -238,6 +254,144 @@ namespace HotKey_MainFolder
                 SendMessageW(GetForegroundWindow(), WM_APPCOMMAND, IntPtr.Zero, (IntPtr)APPCOMMAND_VOLUME_UP);
         }
 
+
+       public static void Define()
+        {
+            Process p = null;
+            try
+            {
+                SendKeys.Send("^c");
+                string search = Clipboard.GetText();
+                //Have to put %20 for all spaces for a chrome search... need to look into other browsers but this works for time being
+                search = search.Replace(" ", "%20");
+                ProcessStartInfo si = new ProcessStartInfo("chrome.exe", "www.google.com/search?q=define%20" + search);
+                si.WindowStyle = ProcessWindowStyle.Maximized;
+                p = Process.Start(si);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void HighlightSearch()
+        {
+            Process p = null;
+            try
+            {
+                SendKeys.Send("^c");
+                string search = Clipboard.GetText();
+                //Have to put %20 for all spaces for a chrome search... need to look into other browsers but this works for time being
+                search = search.Replace(" ", "%20");
+                ProcessStartInfo si = new ProcessStartInfo("chrome.exe", "www.google.com/search?q=" + search);
+                si.WindowStyle = ProcessWindowStyle.Maximized;
+                p = Process.Start(si);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void OpenClosedTab()
+        {
+            SendKeys.Send("^+t");
+        }
+
+        public static void YouTubeSearch()
+        {
+            Process p = null;
+            try
+            {
+                SendKeys.Send("^c");
+                string search = Clipboard.GetText();
+                //Have to put %20 for all spaces for a chrome search... need to look into other browsers but this works for time being
+                search = search.Replace(" ", "+");
+                ProcessStartInfo si = new ProcessStartInfo("chrome.exe", "www.youtube.com/results?search_query=" + search);
+                si.WindowStyle = ProcessWindowStyle.Maximized;
+                p = Process.Start(si);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void CloseCurrentProcess()
+        {
+            IntPtr a = GetForegroundWindow();
+           
+            Process[] pr = Process.GetProcesses();
+
+            foreach (Process p in pr)
+            {               
+                if (p.MainWindowHandle == a)
+                {                  
+                    p.CloseMainWindow();
+                    p.Close();
+                    break;
+                }
+            }
+
+        }
+
+        public static void TaskMngr()
+        {
+            Process p = new Process();
+            p.StartInfo.FileName = "taskmgr";
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+        }
+
+        public static void Calculator()
+        {
+            Process p = null;
+            try
+            {
+                SendKeys.Send("^c");
+                string search = Clipboard.GetText();
+                //Have to put %20 for all spaces for a chrome search... need to look into other browsers but this works for time being
+                search = search.Replace(" ", "%20");
+                ProcessStartInfo si = new ProcessStartInfo("chrome.exe", "www.google.com/search?q=google%20calculator%20" + search);
+                si.WindowStyle = ProcessWindowStyle.Maximized;
+                p = Process.Start(si);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void AmazonSearch()
+        {
+            Process p = null;
+            try
+            {
+                SendKeys.Send("^c");
+                string search = Clipboard.GetText();
+                //Have to put %20 for all spaces for a chrome search... need to look into other browsers but this works for time being
+                //search = search.Replace(" ", "%20");
+                ProcessStartInfo si = new ProcessStartInfo("chrome.exe", "www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=" + search);
+                si.WindowStyle = ProcessWindowStyle.Maximized;
+                p = Process.Start(si);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void Screenshot()
+        {
+            SendKeys.Send("{PRTSC}");
+            
+            
+        }
+
+        
+
         public static bool RespondToInput { get { return respondToInput; } set { respondToInput = value; } }
     }
+
+    
 }
