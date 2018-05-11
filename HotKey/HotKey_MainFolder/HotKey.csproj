@@ -70,6 +70,12 @@
     <Compile Include="HotKeyControl.Designer.cs">
       <DependentUpon>HotKeyControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelectCmd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectCmd.Designer.cs">
+      <DependentUpon>SelectCmd.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -87,6 +93,9 @@
     </Compile>
     <EmbeddedResource Include="HotKeyControl.resx">
       <DependentUpon>HotKeyControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectCmd.resx">
+      <DependentUpon>SelectCmd.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

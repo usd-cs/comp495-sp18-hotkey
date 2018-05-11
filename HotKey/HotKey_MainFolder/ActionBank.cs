@@ -12,9 +12,9 @@ using System.Drawing.Imaging;
 namespace HotKey_MainFolder
 {
 
+
     public static class ActionBank
     {
-        
         [DllImport("user32.dll")]
         private static extern IntPtr GetOpenClipboardWindow();
         [DllImport("user32.dll", SetLastError = true)]
@@ -76,7 +76,7 @@ namespace HotKey_MainFolder
             }
         }
         public static void CopyPrimary()
-        {
+        {            
             Copy(0);
         }
         public static void CopyOne()
@@ -215,7 +215,14 @@ namespace HotKey_MainFolder
             Process p = null;
             try
             {
-                ProcessStartInfo si = new ProcessStartInfo("chrome.exe", "www.stackoverflow.com");
+                string cmd = "";
+                foreach(HotKeyItem h in ModeForm.hotKeyItemList)
+                {
+                    if (h.ModKeys == ModeForm.currentMod && h.Key == ModeForm.key)
+                        cmd = h.cmd;
+                }
+                Console.WriteLine(cmd);
+                ProcessStartInfo si = new ProcessStartInfo("chrome.exe", cmd);
                 si.WindowStyle = ProcessWindowStyle.Maximized;
                 p = Process.Start(si);
             }
@@ -351,7 +358,7 @@ namespace HotKey_MainFolder
                 SendKeys.Send("^c");
                 string search = Clipboard.GetText();
                 //Have to put %20 for all spaces for a chrome search... need to look into other browsers but this works for time being
-                search = search.Replace(" ", "%20");
+                search = search.Replace("+", "%2B");
                 ProcessStartInfo si = new ProcessStartInfo("chrome.exe", "www.google.com/search?q=google%20calculator%20" + search);
                 si.WindowStyle = ProcessWindowStyle.Maximized;
                 p = Process.Start(si);
