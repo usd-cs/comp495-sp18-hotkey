@@ -27,6 +27,7 @@ namespace HotKey_MainFolder
 
             this.mainForm = mainForm;
             modeLabel.Text = modeName;
+            this.ShowInTaskbar = false;
 
             InitializeHotKeyItems();
             InitializeHotKeyControls();
@@ -149,6 +150,33 @@ namespace HotKey_MainFolder
         private void hotKeyItemPanel_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void ModeForm_Resize(object sender, EventArgs e)
+        {
+            //if the form is minimized  
+            //hide it from the task bar  
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+            }
+        }
+
+        private void activeIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Show();
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void activeIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
     }
 

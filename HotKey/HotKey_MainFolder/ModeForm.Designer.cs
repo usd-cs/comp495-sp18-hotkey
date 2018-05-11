@@ -28,16 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModeForm));
             this.backButton = new System.Windows.Forms.Button();
             this.modeLabel = new System.Windows.Forms.Label();
             this.hotKeyItemPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.addHotKeyButton = new System.Windows.Forms.Button();
+            this.activeIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // backButton
             // 
             this.backButton.Location = new System.Drawing.Point(9, 7);
-            this.backButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.backButton.Margin = new System.Windows.Forms.Padding(2);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(56, 39);
             this.backButton.TabIndex = 1;
@@ -62,7 +65,7 @@
             this.hotKeyItemPanel.BackColor = System.Drawing.SystemColors.Window;
             this.hotKeyItemPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.hotKeyItemPanel.Location = new System.Drawing.Point(10, 52);
-            this.hotKeyItemPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.hotKeyItemPanel.Margin = new System.Windows.Forms.Padding(2);
             this.hotKeyItemPanel.Name = "hotKeyItemPanel";
             this.hotKeyItemPanel.Size = new System.Drawing.Size(644, 314);
             this.hotKeyItemPanel.TabIndex = 3;
@@ -72,13 +75,20 @@
             // addHotKeyButton
             // 
             this.addHotKeyButton.Location = new System.Drawing.Point(572, 370);
-            this.addHotKeyButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.addHotKeyButton.Margin = new System.Windows.Forms.Padding(2);
             this.addHotKeyButton.Name = "addHotKeyButton";
             this.addHotKeyButton.Size = new System.Drawing.Size(82, 39);
             this.addHotKeyButton.TabIndex = 4;
             this.addHotKeyButton.Text = "Add Hot Key";
             this.addHotKeyButton.UseVisualStyleBackColor = true;
             this.addHotKeyButton.Click += new System.EventHandler(this.AddHotKeyButton_Click);
+            // 
+            // activeIcon
+            // 
+            this.activeIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("activeIcon.Icon")));
+            this.activeIcon.Text = "notifyIcon1";
+            this.activeIcon.Visible = true;
+            this.activeIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.activeIcon_MouseDoubleClick_1);
             // 
             // ModeForm
             // 
@@ -89,9 +99,8 @@
             this.Controls.Add(this.hotKeyItemPanel);
             this.Controls.Add(this.modeLabel);
             this.Controls.Add(this.backButton);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "ModeForm";
             this.Text = "HotKey";
             this.ResumeLayout(false);
@@ -104,6 +113,7 @@
         private System.Windows.Forms.Label modeLabel;
         private System.Windows.Forms.FlowLayoutPanel hotKeyItemPanel;
         private System.Windows.Forms.Button addHotKeyButton;
+        private System.Windows.Forms.NotifyIcon activeIcon;
     }
 }
 
