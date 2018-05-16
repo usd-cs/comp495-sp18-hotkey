@@ -14,17 +14,19 @@ namespace HotKey_MainFolder
         private string actionName;
         private ModKeys modKeys;
         private Keys key;
-
+        public string cmd;
         private KeybindHook keybindHook;
 
 
-        public HotKeyItem(IntPtr formHandle, Dictionary<Tuple<ModKeys, Keys>, Action> keybindActionDictionary, Action action, string actionName, ModKeys modKeys, Keys key)
+        public HotKeyItem(string cmd, IntPtr formHandle, Dictionary<Tuple<ModKeys, Keys>, Action> keybindActionDictionary, Action action, string actionName, ModKeys modKeys, Keys key)
         {
+            this.cmd = cmd;
             this.keybindActionDictionary = keybindActionDictionary;
             this.action = action;
             this.actionName = actionName;
             this.modKeys = modKeys;
             this.key = key;
+            
 
             //create keybind hook and register keybind if it exists
             keybindHook = new KeybindHook(formHandle);
